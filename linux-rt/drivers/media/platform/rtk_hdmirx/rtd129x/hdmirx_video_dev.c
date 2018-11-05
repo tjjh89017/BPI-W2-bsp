@@ -466,6 +466,28 @@ static long v4l2_hdmi_do_ioctl(struct file *file, unsigned int cmd, void *arg)
 
 		break;
 	}
+
+	case VIDIOC_G_INPUT:
+	{
+		/* force set to index 0 */
+		__u32 *index = arg;
+		*index = 0;
+		ret = 0;
+		break;
+
+	}
+
+	case VIDIOC_ENUMINPUT:
+	{
+		/* empty resource */
+		struct v4l2_input *input = arg;
+
+		/* set only std which ffmpeg only use */
+		input->std = 0;
+
+		ret = 0;
+		break;
+	}
 	default:
 		HDMIRX_ERROR("Unknown ioctl TYPE(0x%x) NR(%u) SIZE(%u)",
 			_IOC_TYPE(cmd), _IOC_NR(cmd), _IOC_SIZE(cmd));
