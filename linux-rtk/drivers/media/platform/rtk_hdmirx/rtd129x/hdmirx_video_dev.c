@@ -504,6 +504,11 @@ static long v4l2_hdmi_do_ioctl(struct file *file, unsigned int cmd, void *arg)
 		/* empty resource */
 		struct v4l2_input *input = arg;
 
+		/* only have channel 0, if bigger than 0, return EINVAL (for gstreamer) */
+		if (input->index > 0) {
+			return -EINVAL
+		}
+
 		/* set only std which ffmpeg only use */
 		input->std = 0;
 
